@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <title>{% block title %}Test des pizzeria{% endblock %}</title>
-    {% block stylesheets %}{% endblock %}
     <script src="https://use.fontawesome.com/7e065ddf26.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Exo|Indie+Flower" rel="stylesheet">
     {{ encore_entry_link_tags('app') }}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    {% block stylesheets %}{% endblock %}
 </head>
 <body>
 <header class="container">
@@ -38,6 +38,8 @@
         {% block body %}{% endblock %}
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 {% block javascripts %}{% endblock %}
+
 </body>
 </html>
