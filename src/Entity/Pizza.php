@@ -34,11 +34,23 @@ class Pizza
     private Collection $quantiteIngredients;
 
     /**
+     * @ORM\ManyToMany(targetEntity=Pizzeria::class, mappedBy="pizza")
+     */
+    private $pizzerias;
+
+    /**
+     * @ORM\OneToMany(targetEntity=IngredientPizza::class, mappedBy="pizza", orphanRemoval=true)
+     */
+    private $ingredientPizza;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->quantiteIngredients = new ArrayCollection();
+        $this->pizzerias = new ArrayCollection();
+        $this->ingredientPizza = new ArrayCollection();
     }
 
     /**
@@ -104,5 +116,62 @@ class Pizza
     public function getQuantiteIngredients(): Collection
     {
         return $this->quantiteIngredients;
+    }
+
+    /**
+     * @return Collection|Pizzeria[]
+     */
+    public function getPizzerias(): Collection
+    {
+        return $this->pizzerias;
+    }
+
+    public function addPizzeria(Pizzeria $pizzeria): self
+    {
+        if (!$this->pizzerias->contains($pizzeria)) {
+            $this->pizzerias[] = $pizzeria;
+            $pizzeria->addPizza($this);
+        }
+
+        return $this;
+    }
+
+    public function removePizzeria(Pizzeria $pizzeria): self
+    {
+        if ($this->pizzerias->removeElement($pizzeria)) {
+            $pizzeria->removePizza($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IngredientPizza[]
+     */
+    public function getIngredientPizza(): Collection
+    {
+        return $this->ingredientPizza;
+    }
+
+    public function addIngredientPizza(IngredientPizza $ingredientPizza): self
+    {
+        if (!$this->ingredientPizza->contains($ingredientPizza)) {
+            $this->ingredientPizza[] = $ingredientPizza;
+            $ingredientPizza->setPizza($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredientPizza(IngredientPizza $ingredientPizza): self
+    {
+        if ($this->ingredientPizza->removeElement($ingredientPizza)) {
+            // set the owning side to null (unless already changed)
+            if ($ingredientPizza->getPizza() === $this) {
+                $ingredientPizza->setPizza(null);
+            }
+        }
+
+        return $this;
     }
 }
